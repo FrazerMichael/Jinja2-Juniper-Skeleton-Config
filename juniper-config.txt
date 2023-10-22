@@ -1,0 +1,14 @@
+{# templates/cisco-config.txt #}
+
+configure
+set hostname {{ hostname }}
+{% for each in interfaces %}
+set interface each['interface'] family inet address {{ each['ip'] }}{{ each['netmask'] }}
+{% endfor %}
+
+{% for each in interfaces %}
+set protocols ospf area each['area'] interface each['interface']
+network {{ each['ip'] }} 0.0.0.0 area {{ each['area'] }}
+{% endfor %}
+
+commit
